@@ -10,18 +10,15 @@
 
 .menu-item {
     -fx-padding: 8 0 8 10;
-
 }
 
 .menu-item > .label {
     -fx-pref-width: 200;
-
 }
 
 .menu-item > .accelerator-text {
     -fx-padding: 0 10 0 50;
     -fx-pref-width: 200;
-
 }
 
 #pneFind #pneReplace {
