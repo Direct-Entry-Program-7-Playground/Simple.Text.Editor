@@ -19,6 +19,7 @@ public class AppInitializer extends Application {
 
         // Reading preferences for the user
         boolean isMaximized = Preferences.userRoot().node("lk.ijse.simple-text-editor").getBoolean("is-maximized", false);
+        boolean isCenter = Preferences.userRoot().node("lk.ijse.simple-text-editor").getBoolean("is-center", true);
         double xPos = Preferences.userRoot().node("lk.ijse.simple-text-editor").getDouble("xPos", -1);
         double yPos = Preferences.userRoot().node("lk.ijse.simple-text-editor").getDouble("yPos", -1);
         double width = Preferences.userRoot().node("lk.ijse.simple-text-editor").getDouble("width", -1);
@@ -40,6 +41,13 @@ public class AppInitializer extends Application {
             primaryStage.setHeight(height == -1 ? root.getPrefHeight() : height);
         }
 
-        
+        // Set Editor window position
+        if (isCenter) {
+            primaryStage.centerOnScreen();
+        } else {
+            primaryStage.setX(xPos == -1 ? root.getLayoutX() : xPos);
+            primaryStage.setY(yPos == -1 ? root.getLayoutY() : yPos);
+        }
+
     }
 }
