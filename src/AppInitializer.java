@@ -18,20 +18,17 @@ public class AppInitializer extends Application {
     public void start(Stage primaryStage) throws IOException {
 
         // Reading preferences for the user
-        boolean isMaximized = Preferences.userRoot().node("lk.ijse.simple-text-editor").getBoolean("is-maximized", false);
-        boolean isCenter = Preferences.userRoot().node("lk.ijse.simple-text-editor").getBoolean("is-center", true);
-        double xPos = Preferences.userRoot().node("lk.ijse.simple-text-editor").getDouble("xPos", -1);
-        double yPos = Preferences.userRoot().node("lk.ijse.simple-text-editor").getDouble("yPos", -1);
-        double width = Preferences.userRoot().node("lk.ijse.simple-text-editor").getDouble("width", -1);
-        double height = Preferences.userRoot().node("lk.ijse.simple-text-editor").getDouble("width", -1);
-
+        boolean isMaximized = Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getBoolean("is-maximized", false);
+        double width = Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getDouble("width", -1);
+        double height = Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getDouble("height", -1);
+        double xPos = Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getDouble("xPos", -1);
+        double yPos = Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getDouble("yPos", -1);
 
         AnchorPane root = FXMLLoader.load(getClass().getResource("./view/EditorForm.fxml"));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simple Text Editor");
         primaryStage.getIcons().add(new Image("asset/img/SimpleTextEditorIcon.png"));
-        primaryStage.show();
 
         // Set Editor window size
         if (isMaximized) {
@@ -42,12 +39,23 @@ public class AppInitializer extends Application {
         }
 
         // Set Editor window position
-        if (isCenter) {
+        if (xPos == -1 & yPos == -1) {
             primaryStage.centerOnScreen();
         } else {
-            primaryStage.setX(xPos == -1 ? root.getLayoutX() : xPos);
-            primaryStage.setY(yPos == -1 ? root.getLayoutY() : yPos);
+            primaryStage.setX(xPos == -1 ? primaryStage.getX() : xPos);
+            primaryStage.setY(yPos == -1 ? primaryStage.getY() : yPos);
         }
 
+        primaryStage.show();
+
+        // Set user preferences on close of primaryStage
+        primaryStage.setOnCloseRequest(event -> {
+
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putBoolean("is-maximized", primaryStage.isMaximized());
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("width", root.getWidth());
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("height", root.getHeight());
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("xPos", primaryStage.getX());
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("yPos", primaryStage.getY());
+        });
     }
 }
