@@ -180,10 +180,12 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemUndo_onAction(ActionEvent actionEvent) {
+        txtEditor.undo();
     }
 
     @FXML
     private void mnuItemRedo_onAction(ActionEvent actionEvent) {
+        txtEditor.redo();
     }
 
     @FXML
