@@ -107,6 +107,7 @@ public class EditorFormController {
     private void setListeners() {
 
         txtEditor.wrapTextProperty().addListener((observable, oldValue, newValue) -> {
+            // Set user preference on wrapTextProperty change
             Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putBoolean("wrap-text", txtEditor.isWrapText());
         });
     }
@@ -187,14 +188,17 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemCut_onAction(ActionEvent actionEvent) {
+        txtEditor.cut();
     }
 
     @FXML
     private void mnuItemCopy_onAction(ActionEvent actionEvent) {
+        txtEditor.copy();
     }
 
     @FXML
     private void mnuItemPaste_onAction(ActionEvent actionEvent) {
+        txtEditor.paste();
     }
 
     @FXML
