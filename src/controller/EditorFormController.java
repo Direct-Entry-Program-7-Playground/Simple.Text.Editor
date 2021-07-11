@@ -104,6 +104,10 @@ public class EditorFormController {
         });
     }
 
+    private void setListeners(){
+
+    }
+    
     private void init() {
 
         // Set initial visibility of Find and Replace panes
