@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.StatusBar?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1440.0" stylesheets="@../assets/css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditorFormController">
+<AnchorPane prefHeight="768.0" prefWidth="1440.0" stylesheets="@../asset/css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditorFormController">
    <children>
       <VBox fx:id="baseVBox" layoutX="59.0" layoutY="-58.0" prefHeight="768.0" prefWidth="1440.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
