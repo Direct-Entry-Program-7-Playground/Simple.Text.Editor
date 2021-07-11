@@ -99,15 +99,18 @@ public class EditorFormController {
     public void initialize() {
 
         Platform.runLater(() -> {
-
+            setListeners();
             init();
         });
     }
 
-    private void setListeners(){
+    private void setListeners() {
 
+        txtEditor.wrapTextProperty().addListener((observable, oldValue, newValue) -> {
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putBoolean("wrap-text", txtEditor.isWrapText());
+        });
     }
-    
+
     private void init() {
 
         // Set initial visibility of Find and Replace panes
@@ -208,6 +211,7 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemWrap_onAction(ActionEvent actionEvent) {
+        txtEditor.setWrapText(!txtEditor.isWrapText());
     }
 
     @FXML
