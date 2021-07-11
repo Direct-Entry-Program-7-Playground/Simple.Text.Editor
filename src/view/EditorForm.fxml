@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.StatusBar?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1440.0" stylesheets="@../assets/css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditorFormController">
+   <children>
+      <VBox fx:id="baseVBox" layoutX="59.0" layoutY="-58.0" prefHeight="768.0" prefWidth="1440.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <MenuBar fx:id="mnuBar">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem fx:id="mnuItemNew" mnemonicParsing="false" onAction="#mnuItemNew_onAction" text="New">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="mnuItemOpen" mnemonicParsing="false" onAction="#mnuItemOpen_onAction" text="Open...">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem fx:id="mnuItemSave" mnemonicParsing="false" onAction="#mnuItemSave_onAction" text="Save">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem fx:id="mnuItemSaveAs" mnemonicParsing="false" onAction="#mnuItemSaveAs_onAction" text="Save As...">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="mnuItemPrint" mnemonicParsing="false" onAction="#mnuItemPrint_onAction" text="Print">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="mnuItemPageSetup" mnemonicParsing="false" onAction="#mnuItemPageSetup_onAction" text="Page Setup">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="P" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="mnuItemExit" mnemonicParsing="false" onAction="#mnuItemExit_onAction" text="Exit">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="W" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                        <MenuItem fx:id="mnuItemUndo" mnemonicParsing="false" onAction="#mnuItemUndo_onAction" text="Undo">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="mnuItemRedo" mnemonicParsing="false" onAction="#mnuItemRedo_onAction" text="Redo">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem fx:id="mnuItemCut" mnemonicParsing="false" onAction="#mnuItemCut_onAction" text="Cut">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem fx:id="mnuItemCopy" mnemonicParsing="false" onAction="#mnuItemCopy_onAction" text="Copy">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem fx:id="mnuItemPaste" mnemonicParsing="false" onAction="#mnuItemPaste_onAction" text="Paste">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="V" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="mnuItemFind" mnemonicParsing="false" onAction="#mnuItemFind_onAction" text="Find">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem fx:id="mnuItemReplace" mnemonicParsing="false" onAction="#mnuItemReplace_onAction" text="Replace">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="mnuItemSelectAll" mnemonicParsing="false" onAction="#mnuItemSelectAll_onAction" text="Select All">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                  </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="Format">
+                     <items>
+                      <MenuItem fx:id="mnuItemWrap" mnemonicParsing="false" onAction="#mnuItemWrap_onAction" text="Wordwrap" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="View">
+                     <items>
+                        <Menu mnemonicParsing="false" text="Zoom">
+                          <items>
+                            <MenuItem fx:id="mnuItemZoomIn" mnemonicParsing="false" onAction="#mnuItemZoomIn_onAction" text="Zoom In">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="PAGE_UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <MenuItem fx:id="mnuItemZoomOut" mnemonicParsing="false" onAction="#mnuItemZoomOut_onAction" text="Zoom Out">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="PAGE_DOWN" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <MenuItem fx:id="mnuItemDefaultZoom" mnemonicParsing="false" onAction="#mnuItemDefaultZoom_onAction" text="Restore Default Zoom">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="NUMPAD0" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                          </items>
+                        </Menu>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="mnuItemStatusBar" mnemonicParsing="false" onAction="#mnuItemStatusBar_onAction" text="Status Bar" />
+                     </items>
+                  </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem fx:id="mnuItemAbout" mnemonicParsing="false" onAction="#mnuItemAbout_onAction" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <AnchorPane fx:id="pneFind">
+               <children>
+                  <HBox id="hbFind" alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1440.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label text="Find what:" />
+                        <TextField fx:id="txtFind" promptText="Text to find" />
+                        <Separator orientation="VERTICAL" />
+                        <Label text="Direction:" />
+                        <HBox alignment="CENTER" spacing="20.0">
+                           <children>
+                              <RadioButton fx:id="rdbUp" mnemonicParsing="false" selected="true" text="Up">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="FindDirGrp" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="rdbDown" mnemonicParsing="false" selected="true" text="Down" toggleGroup="$FindDirGrp" />
+                           </children>
+                        </HBox>
+                        <Separator orientation="VERTICAL" />
+                        <CheckBox fx:id="cbCaseMatchInFind" mnemonicParsing="false" text="Match case" />
+                        <Separator layoutX="554.0" layoutY="15.0" orientation="VERTICAL" />
+                        <Button fx:id="btnFindNext" mnemonicParsing="false" onAction="#btnFindNext_onAction" text="Find Next" />
+                        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="btnFindClose" mnemonicParsing="false" onAction="#btnFindClose_onAction" styleClass="btn-close">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="CLOSE" size="24" />
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="20.0" right="10.0" />
+               </padding>
+            </AnchorPane>
+            <AnchorPane fx:id="pneReplace" layoutX="10.0" layoutY="45.0">
+               <children>
+                  <HBox id="hbFind" alignment="CENTER" prefHeight="50.0" prefWidth="1440.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label text="Find what:" />
+                        <TextField fx:id="txtFindInReplace" promptText="Text to find" />
+                        <Separator orientation="VERTICAL" />
+                        <Label layoutX="30.0" layoutY="27.0" text="Replace with:" />
+                        <TextField fx:id="txtReplace" layoutX="111.0" layoutY="15.0" promptText="Replace text" />
+                        <Separator orientation="VERTICAL" />
+                        <CheckBox fx:id="cbCaseMatchInReplace" mnemonicParsing="false" text="Match case" />
+                        <Separator layoutX="554.0" layoutY="15.0" orientation="VERTICAL" />
+                        <Button fx:id="btnFindNextInReplace" mnemonicParsing="false" onAction="#btnFindNextInReplace_onAction" text="Find Next" />
+                        <Button fx:id="btnReplace" layoutX="804.0" layoutY="15.0" mnemonicParsing="false" onAction="#btnReplace_onAction" text="Replace" />
+                        <Button fx:id="btnReplaceAll" layoutX="913.0" layoutY="15.0" mnemonicParsing="false" onAction="#btnReplaceAll_onAction" text="Replace All" />
+                        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="btnReplaceClose" mnemonicParsing="false" onAction="#btnReplaceClose_onAction" styleClass="btn-close">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="CLOSE" size="24" />
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="20.0" right="10.0" />
+               </padding>
+            </AnchorPane>
+            <TextArea fx:id="txtEditor" onMouseClicked="#txtEditor_onClicked" VBox.vgrow="ALWAYS" />
+            <StatusBar fx:id="stsbrBottom">
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </StatusBar>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
