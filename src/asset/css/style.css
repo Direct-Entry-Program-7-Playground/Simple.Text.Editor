@@ -1,0 +1,53 @@
+* {
+    -fx-font-size: 16;
+}
+
+.text-field {
+    -fx-pref-height: 50;
+    -fx-pref-width: 250;
+}
+
+
+.menu-item {
+    -fx-padding: 8 0 8 10;
+
+}
+
+.menu-item > .label {
+    -fx-pref-width: 200;
+
+}
+
+.menu-item > .accelerator-text {
+    -fx-padding: 0 10 0 50;
+    -fx-pref-width: 200;
+
+}
+
+#pneFind #pneReplace {
+    -fx-background-color: #eee;
+}
+
+.button {
+    -fx-pref-height: 40;
+}
+
+.menu-item .accelerator {
+    -fx-text-alignment: center-right;
+}
+
+#btnFindClose, #btnReplaceClose {
+    -fx-background-radius: 20;
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+}
+
+
+.glyph-icon {
+    -fx-font-size: 15;
+}
+
+.glyph-icon:hover {
+    -fx-font-size: 15;
+    visibility: true;
+}
