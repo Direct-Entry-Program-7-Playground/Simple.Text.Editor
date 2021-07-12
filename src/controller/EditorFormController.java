@@ -116,6 +116,7 @@ public class EditorFormController {
         });
 
         Printer.defaultPrinterProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(newValue);
             // Listen to printers change
             if (newValue == null) {
                 printerAvailable = false;
@@ -166,9 +167,7 @@ public class EditorFormController {
         }
         printerAvailable = Printer.getDefaultPrinter() != null;
 
-        if (printerAvailable) {
-            this.printerJob = PrinterJob.createPrinterJob();
-        } else {
+        if (!printerAvailable) {
             mnuItemPrint.setDisable(true);
             mnuItemPageSetup.setDisable(true);
         }
@@ -193,17 +192,28 @@ public class EditorFormController {
     @FXML
     private void mnuItemPrint_onAction(ActionEvent actionEvent) {
         // Show printDialog and add page to printer job queue if a default printer is available
-        if (printerAvailable) {
-            printerJob.showPrintDialog(txtEditor.getScene().getWindow());
+        printerJob = PrinterJob.createPrinterJob();
+
+        if (printerAvailable && printerJob != null && printerJob.showPrintDialog(txtEditor.getScene().getWindow())) {
             printerJob.printPage(txtEditor.lookup("Text"));
+        }
+
+        if (printerJob != null) {
+            printerJob.endJob();
         }
     }
 
     @FXML
     private void mnuItemPageSetup_onAction(ActionEvent actionEvent) {
         // Show print pageSetupDialog if a default printer is available
+        printerJob = PrinterJob.createPrinterJob();
+
         if (printerAvailable) {
             printerJob.showPageSetupDialog(txtEditor.getScene().getWindow());
+        }
+
+        if (printerJob != null) {
+            printerJob.endJob();
         }
     }
 
