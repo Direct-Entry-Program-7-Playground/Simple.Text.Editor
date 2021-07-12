@@ -345,12 +345,12 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemNew_onAction(ActionEvent actionEvent) {
-        askToSave();
-        txtEditor.clear();
-        isModified = false;
-        saveFile = null;
-        setWindowTitle();
-
+        if (askToSave()) {
+            txtEditor.clear();
+            isModified = false;
+            saveFile = null;
+            setWindowTitle();
+        }
     }
 
     @FXML
@@ -432,6 +432,13 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemExit_onAction(ActionEvent actionEvent) {
+        if (askToSave()) {
+            txtEditor.clear();
+            isModified = false;
+            saveFile = null;
+            setWindowTitle();
+            Platform.exit();
+        }
     }
 
     @FXML
