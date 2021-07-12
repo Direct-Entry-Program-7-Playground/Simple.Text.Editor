@@ -256,6 +256,7 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemSelectAll_onAction(ActionEvent actionEvent) {
+        txtEditor.selectAll();
     }
 
     @FXML
