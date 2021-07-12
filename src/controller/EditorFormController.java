@@ -8,6 +8,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.StatusBar;
 
@@ -190,6 +191,27 @@ public class EditorFormController {
             mnuItemPrint.setDisable(true);
             mnuItemPageSetup.setDisable(true);
         }
+
+        Label stbarCharCount = new Label("Chars: " + txtEditor.getText().length());
+        stbarCharCount.setStyle("-fx-text-alignment: center; -fx-alignment: center; -fx-padding:0 0 0 20");
+        stbarCharCount.prefHeightProperty().bind(stsbrBottom.heightProperty());
+
+        Label stbarCarrotPosition = new Label("Carrot at: " + txtEditor.getCaretPosition());
+        stbarCarrotPosition.setStyle("-fx-text-alignment: center; -fx-alignment: center; -fx-padding:0 0 0 20");
+        stbarCarrotPosition.prefHeightProperty().bind(stsbrBottom.heightProperty());
+
+        Label stbarWordCount = new Label("Words: " + (txtEditor.getText().equals("") ? 0 : txtEditor.getText().split("\\s").length));
+        stbarWordCount.setStyle("-fx-text-alignment: center; -fx-alignment: center; -fx-padding:0 0 0 20");
+        stbarWordCount.prefHeightProperty().bind(stsbrBottom.heightProperty());
+
+        Label stbarfontSize = new Label("Font size: " + txtEditor.getFont().getSize());
+        stbarfontSize.setStyle("-fx-text-alignment: center; -fx-alignment: center; -fx-padding:0 0 0 20");
+        stbarfontSize.prefHeightProperty().bind(stsbrBottom.heightProperty());
+
+        HBox stbRightHBox = new HBox();
+        stbRightHBox.setSpacing(10);
+        stbRightHBox.getChildren().addAll(stbarfontSize, stbarCarrotPosition, stbarCharCount, stbarWordCount);
+        stsbrBottom.getRightItems().add(stbRightHBox);
     }
 
     @FXML
