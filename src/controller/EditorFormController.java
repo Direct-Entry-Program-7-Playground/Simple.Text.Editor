@@ -18,6 +18,10 @@ public class EditorFormController {
 
     PrinterJob printerJob;
     boolean printerAvailable;
+    Label stbarCharCount;
+    Label stbarCarrotPosition;
+    Label stbarWordCount;
+    Label stbarfontSize;
     @FXML
     private VBox baseVBox;
     @FXML
@@ -104,12 +108,21 @@ public class EditorFormController {
     public void initialize() {
 
         Platform.runLater(() -> {
-            setListeners();
             init();
+            setListeners();
         });
     }
 
     private void setListeners() {
+
+        txtEditor.textProperty().addListener((observable, oldValue, newValue) -> {
+            stbarCharCount.setText("Chars: " + getCharCount());
+            stbarWordCount.setText("Words: " + getWordCount());
+        });
+
+        txtEditor.caretPositionProperty().addListener((observable, oldValue, newValue) -> {
+            stbarCarrotPosition.setText("Carrot at: " + getCaretPosition());
+        });
 
         txtEditor.wrapTextProperty().addListener((observable, oldValue, newValue) -> {
             // Set user preference on wrapTextProperty change
@@ -122,6 +135,7 @@ public class EditorFormController {
         });
 
         txtEditor.fontProperty().addListener((observable, oldValue, newValue) -> {
+            stbarfontSize.setText("Font size: " + getEditorFontSize());
             // Set user preference on editor fontProperty change
             Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("font-size", txtEditor.getFont().getSize());
         });
@@ -192,19 +206,19 @@ public class EditorFormController {
             mnuItemPageSetup.setDisable(true);
         }
 
-        Label stbarCharCount = new Label("Chars: " + txtEditor.getText().length());
+        stbarCharCount = new Label("Chars: " + getCharCount());
         stbarCharCount.setStyle("-fx-text-alignment: center; -fx-alignment: center; -fx-padding:0 0 0 20");
         stbarCharCount.prefHeightProperty().bind(stsbrBottom.heightProperty());
 
-        Label stbarCarrotPosition = new Label("Carrot at: " + txtEditor.getCaretPosition());
+        stbarCarrotPosition = new Label("Carrot at: " + getCaretPosition());
         stbarCarrotPosition.setStyle("-fx-text-alignment: center; -fx-alignment: center; -fx-padding:0 0 0 20");
         stbarCarrotPosition.prefHeightProperty().bind(stsbrBottom.heightProperty());
 
-        Label stbarWordCount = new Label("Words: " + (txtEditor.getText().equals("") ? 0 : txtEditor.getText().split("\\s").length));
+        stbarWordCount = new Label("Words: " + getWordCount());
         stbarWordCount.setStyle("-fx-text-alignment: center; -fx-alignment: center; -fx-padding:0 0 0 20");
         stbarWordCount.prefHeightProperty().bind(stsbrBottom.heightProperty());
 
-        Label stbarfontSize = new Label("Font size: " + txtEditor.getFont().getSize());
+        stbarfontSize = new Label("Font size: " + getEditorFontSize());
         stbarfontSize.setStyle("-fx-text-alignment: center; -fx-alignment: center; -fx-padding:0 0 0 20");
         stbarfontSize.prefHeightProperty().bind(stsbrBottom.heightProperty());
 
@@ -212,6 +226,22 @@ public class EditorFormController {
         stbRightHBox.setSpacing(10);
         stbRightHBox.getChildren().addAll(stbarfontSize, stbarCarrotPosition, stbarCharCount, stbarWordCount);
         stsbrBottom.getRightItems().add(stbRightHBox);
+    }
+
+    private int getCharCount() {
+        return txtEditor.getText().length();
+    }
+
+    private int getWordCount() {
+        return (txtEditor.getText().isEmpty() ? 0 : txtEditor.getText().split("\\s").length);
+    }
+
+    private int getCaretPosition() {
+        return txtEditor.getText().isEmpty() ? 0 : txtEditor.getCaretPosition();
+    }
+
+    private int getEditorFontSize() {
+        return ((int) txtEditor.getFont().getSize());
     }
 
     @FXML
