@@ -115,6 +115,11 @@ public class EditorFormController {
             Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putBoolean("wrap-text", txtEditor.isWrapText());
         });
 
+        stsbrBottom.visibleProperty().addListener((observable, oldValue, newValue) -> {
+            // Set user preference on wrapTextProperty change
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putBoolean("show-statusbar", stsbrBottom.isVisible());
+        });
+
         Printer.defaultPrinterProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println(newValue);
             // Listen to printers change
@@ -140,6 +145,10 @@ public class EditorFormController {
 
         // Set text editor wrapping status to according to user preference
         txtEditor.setWrapText(Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getBoolean("wrap-text", true));
+
+        // Set text editor statusbar visibility according to user preference
+        stsbrBottom.setVisible(Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getBoolean("show-statusbar", true));
+        stsbrBottom.setManaged(Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getBoolean("show-statusbar", true));
 
         // Add dummy text
         {
@@ -278,6 +287,13 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemStatusBar_onAction(ActionEvent actionEvent) {
+        if(stsbrBottom.isVisible()){
+            stsbrBottom.setManaged(false);
+            stsbrBottom.setVisible(false);
+        }else {
+            stsbrBottom.setManaged(true);
+            stsbrBottom.setVisible(true);
+        }
     }
 
     @FXML
