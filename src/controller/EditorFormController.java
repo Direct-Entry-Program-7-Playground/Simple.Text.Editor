@@ -116,8 +116,13 @@ public class EditorFormController {
         });
 
         stsbrBottom.visibleProperty().addListener((observable, oldValue, newValue) -> {
-            // Set user preference on wrapTextProperty change
+            // Set user preference on statusbar visibleProperty change
             Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putBoolean("show-statusbar", stsbrBottom.isVisible());
+        });
+
+        txtEditor.fontProperty().addListener((observable, oldValue, newValue) -> {
+            // Set user preference on editor fontProperty change
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("font-size", txtEditor.getFont().getSize());
         });
 
         Printer.defaultPrinterProperty().addListener((observable, oldValue, newValue) -> {
@@ -149,6 +154,11 @@ public class EditorFormController {
         // Set text editor statusbar visibility according to user preference
         stsbrBottom.setVisible(Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getBoolean("show-statusbar", true));
         stsbrBottom.setManaged(Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getBoolean("show-statusbar", true));
+
+        // Set text editor font size according to user preference
+        StringBuilder sbFontSize = new StringBuilder();
+        sbFontSize.append("-fx-font-size: ").append(Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getDouble("font-size", 16)).append(";");
+        txtEditor.setStyle(sbFontSize.toString());
 
         // Add dummy text
         {
@@ -287,10 +297,10 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemStatusBar_onAction(ActionEvent actionEvent) {
-        if(stsbrBottom.isVisible()){
+        if (stsbrBottom.isVisible()) {
             stsbrBottom.setManaged(false);
             stsbrBottom.setVisible(false);
-        }else {
+        } else {
             stsbrBottom.setManaged(true);
             stsbrBottom.setVisible(true);
         }
