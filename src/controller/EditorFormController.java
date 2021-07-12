@@ -26,6 +26,7 @@ public class EditorFormController {
     Label stbarWordCount;
     Label stbarfontSize;
     File saveFile = null;
+    File saveFileDir = null;
     boolean isModified = false;
     @FXML
     private VBox baseVBox;
@@ -184,6 +185,9 @@ public class EditorFormController {
         sbFontSize.append("-fx-font-size: ").append(Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getDouble("font-size", 16)).append(";");
         txtEditor.setStyle(sbFontSize.toString());
 
+        // Set saveFileDir according to user preference
+        saveFileDir = new File(Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").get("last-directory", String.valueOf(new File(System.getProperty("user.home")))));
+
         // Add dummy text
         {
             txtEditor.setText("What is Lorem Ipsum?\n" +
@@ -287,11 +291,13 @@ public class EditorFormController {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All File", "*"));
             fileChooser.setInitialFileName(getFileName());
             fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Text File", "*.txt"));
-            fileChooser.setInitialDirectory(saveFile != null ? saveFile.getParentFile() : null);
+            fileChooser.setInitialDirectory(saveFileDir != null ? new File(String.valueOf(saveFileDir)) : null);
 
             saveFile = fileChooser.showSaveDialog(txtEditor.getScene().getWindow());
-
             if (saveFile == null) return;
+
+            saveFileDir = saveFile.getParentFile();
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").put("last-directory", saveFileDir.toString());
         }
         System.out.println(saveFile != null ? saveFile.getParentFile() : null);
 
@@ -339,6 +345,12 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemNew_onAction(ActionEvent actionEvent) {
+        askToSave();
+        txtEditor.clear();
+        isModified = false;
+        saveFile = null;
+        setWindowTitle();
+
     }
 
     @FXML
@@ -350,13 +362,16 @@ public class EditorFormController {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File", "*.txt"));
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All File", "*"));
             fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Text File", "*.txt"));
-            fileChooser.setInitialDirectory(saveFile != null ? saveFile.getParentFile() : null);
+            fileChooser.setInitialDirectory(saveFileDir != null ? new File(String.valueOf(saveFileDir)) : null);
+
 
             saveFile = fileChooser.showOpenDialog(txtEditor.getScene().getWindow());
 
             if (saveFile == null) {
                 return;
             }
+            saveFileDir = saveFile.getParentFile();
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").put("last-directory", saveFileDir.toString());
 
             try (BufferedReader br = new BufferedReader(new FileReader(saveFile))) {
 
