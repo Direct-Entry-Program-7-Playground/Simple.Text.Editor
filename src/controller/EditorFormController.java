@@ -285,14 +285,49 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemZoomIn_onAction(ActionEvent actionEvent) {
+        // Check for zoom out disability
+        if (mnuItemZoomOut.isDisable()) {
+            mnuItemZoomOut.setDisable(false);
+        }
+
+        // Increase editor font size by 1px
+        double editorFont = txtEditor.getFont().getSize();
+        StringBuilder sbFontSize = new StringBuilder();
+        sbFontSize.append("-fx-font-size: ").append(editorFont + 1).append(";");
+        txtEditor.setStyle(sbFontSize.toString());
     }
 
     @FXML
     private void mnuItemZoomOut_onAction(ActionEvent actionEvent) {
+
+        double editorFont = txtEditor.getFont().getSize();
+        if (editorFont >= 10.0) {
+            // Decrease editor font size by 1px
+            StringBuilder sbFontSize = new StringBuilder();
+            double newFontValue = editorFont - 1;
+            sbFontSize.append("-fx-font-size: ").append(newFontValue).append(";");
+            txtEditor.setStyle(sbFontSize.toString());
+
+            // Disable zoom-out at editor font size 10px
+            if (newFontValue == 10.0) {
+                mnuItemZoomOut.setDisable(true);
+            }
+        }
+
     }
 
     @FXML
     private void mnuItemDefaultZoom_onAction(ActionEvent actionEvent) {
+        // Check for zoom out disability
+        if (mnuItemZoomOut.isDisable()) {
+            mnuItemZoomOut.setDisable(false);
+        }
+
+        // Set editor font size to default value of 16.0px
+        double editorFont = txtEditor.getFont().getSize();
+        StringBuilder sbFontSize = new StringBuilder();
+        sbFontSize.append("-fx-font-size: ").append(16).append(";");
+        txtEditor.setStyle(sbFontSize.toString());
     }
 
     @FXML
