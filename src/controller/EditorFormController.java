@@ -3,6 +3,8 @@ package controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -13,6 +15,8 @@ import java.util.prefs.Preferences;
 
 public class EditorFormController {
 
+    PrinterJob printerJob;
+    boolean printerAvailable;
     @FXML
     private VBox baseVBox;
     @FXML
@@ -110,6 +114,18 @@ public class EditorFormController {
             // Set user preference on wrapTextProperty change
             Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putBoolean("wrap-text", txtEditor.isWrapText());
         });
+
+        Printer.defaultPrinterProperty().addListener((observable, oldValue, newValue) -> {
+            // Listen to printers change
+            if (newValue == null) {
+                printerAvailable = false;
+                mnuItemPrint.setDisable(true);
+                mnuItemPageSetup.setDisable(true);
+            } else {
+                mnuItemPrint.setDisable(false);
+                mnuItemPageSetup.setDisable(false);
+            }
+        });
     }
 
     private void init() {
@@ -148,6 +164,14 @@ public class EditorFormController {
                     "\n" +
                     "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.");
         }
+        printerAvailable = Printer.getDefaultPrinter() != null;
+
+        if (printerAvailable) {
+            this.printerJob = PrinterJob.createPrinterJob();
+        } else {
+            mnuItemPrint.setDisable(true);
+            mnuItemPageSetup.setDisable(true);
+        }
     }
 
     @FXML
@@ -168,10 +192,19 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemPrint_onAction(ActionEvent actionEvent) {
+        // Show printDialog and add page to printer job queue if a default printer is available
+        if (printerAvailable) {
+            printerJob.showPrintDialog(txtEditor.getScene().getWindow());
+            printerJob.printPage(txtEditor.lookup("Text"));
+        }
     }
 
     @FXML
     private void mnuItemPageSetup_onAction(ActionEvent actionEvent) {
+        // Show print pageSetupDialog if a default printer is available
+        if (printerAvailable) {
+            printerJob.showPageSetupDialog(txtEditor.getScene().getWindow());
+        }
     }
 
     @FXML
