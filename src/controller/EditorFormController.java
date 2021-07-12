@@ -10,10 +10,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.StatusBar;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.prefs.Preferences;
 
 public class EditorFormController {
@@ -275,20 +279,81 @@ public class EditorFormController {
         ((Stage) this.txtEditor.getScene().getWindow()).setTitle(getWindowTitle());
     }
 
+    private void save(boolean isSaveAs) {
+
+        if (isSaveAs || saveFile == null) {
+            FileChooser fileChooser = new FileChooser();
+
+            fileChooser.setTitle("Save File");
+
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File", "*.txt"));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All File", "*"));
+            fileChooser.setInitialFileName(getFileName());
+            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Text File", "*.txt"));
+            fileChooser.setInitialDirectory(saveFile != null ? saveFile.getParentFile() : null);
+
+            saveFile = fileChooser.showSaveDialog(txtEditor.getScene().getWindow());
+
+            if (saveFile == null) return;
+        }
+        System.out.println(saveFile != null ? saveFile.getParentFile() : null);
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(saveFile))) {
+            bw.write(txtEditor.getText());
+            isModified = false;
+            setWindowTitle();
+        } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, "File save error!", ButtonType.OK).show();
+            e.printStackTrace();
+        }
+    }
+
+    private boolean askToSave() {
+        ButtonType save = new ButtonType("Save");
+        ButtonType dontSave = new ButtonType("Don't Save");
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to save changes to " + getFileName() + "?", save, dontSave, ButtonType.CANCEL);
+
+        alert.setTitle("Simple Text Editor");
+        alert.showAndWait();
+        ButtonType result = alert.getResult();
+
+        if (result == save) {
+
+            save(true);
+            return true;
+
+        } else if (result == dontSave) {
+
+            txtEditor.clear();
+            isModified = false;
+            saveFile = null;
+            setWindowTitle();
+            return true;
+
+        } else if (result == ButtonType.CANCEL) {
+
+            return false;
+        }
+    }
+
     @FXML
     private void mnuItemNew_onAction(ActionEvent actionEvent) {
     }
 
     @FXML
     private void mnuItemOpen_onAction(ActionEvent actionEvent) {
+
     }
 
     @FXML
     private void mnuItemSave_onAction(ActionEvent actionEvent) {
+        save(false);
     }
 
     @FXML
     private void mnuItemSaveAs_onAction(ActionEvent actionEvent) {
+        save(true);
     }
 
     @FXML
