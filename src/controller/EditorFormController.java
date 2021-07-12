@@ -10,8 +10,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.controlsfx.control.StatusBar;
 
+import java.io.File;
 import java.util.prefs.Preferences;
 
 public class EditorFormController {
@@ -22,6 +24,8 @@ public class EditorFormController {
     Label stbarCarrotPosition;
     Label stbarWordCount;
     Label stbarfontSize;
+    File saveFile = null;
+    boolean isModified = false;
     @FXML
     private VBox baseVBox;
     @FXML
@@ -116,8 +120,12 @@ public class EditorFormController {
     private void setListeners() {
 
         txtEditor.textProperty().addListener((observable, oldValue, newValue) -> {
+            isModified = true;
+
             stbarCharCount.setText("Chars: " + getCharCount());
             stbarWordCount.setText("Words: " + getWordCount());
+
+            setWindowTitle();
         });
 
         txtEditor.caretPositionProperty().addListener((observable, oldValue, newValue) -> {
@@ -226,6 +234,8 @@ public class EditorFormController {
         stbRightHBox.setSpacing(10);
         stbRightHBox.getChildren().addAll(stbarfontSize, stbarCarrotPosition, stbarCharCount, stbarWordCount);
         stsbrBottom.getRightItems().add(stbRightHBox);
+
+        setWindowTitle();
     }
 
     private int getCharCount() {
@@ -242,6 +252,27 @@ public class EditorFormController {
 
     private int getEditorFontSize() {
         return ((int) txtEditor.getFont().getSize());
+    }
+
+    private String getFileName() {
+        if (saveFile != null) {
+            return saveFile.getName();
+        }
+        return "Untitled";
+    }
+
+    private String getWindowTitle() {
+        StringBuilder sb = new StringBuilder();
+        if (isModified) {
+            sb.append("*").append(getFileName()).append(" - ");
+        } else {
+            sb.append(getFileName()).append(" - ");
+        }
+        return sb.append("Simple Text Editor").toString();
+    }
+
+    private void setWindowTitle() {
+        ((Stage) this.txtEditor.getScene().getWindow()).setTitle(getWindowTitle());
     }
 
     @FXML
