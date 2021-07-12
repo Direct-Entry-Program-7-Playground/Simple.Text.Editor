@@ -14,10 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.StatusBar;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.prefs.Preferences;
 
 public class EditorFormController {
@@ -309,32 +306,35 @@ public class EditorFormController {
     }
 
     private boolean askToSave() {
-        ButtonType save = new ButtonType("Save");
-        ButtonType dontSave = new ButtonType("Don't Save");
+        if (isModified) {
+            ButtonType save = new ButtonType("Save");
+            ButtonType dontSave = new ButtonType("Don't Save");
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to save changes to " + getFileName() + "?", save, dontSave, ButtonType.CANCEL);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to save changes to " + getFileName() + "?", save, dontSave, ButtonType.CANCEL);
 
-        alert.setTitle("Simple Text Editor");
-        alert.showAndWait();
-        ButtonType result = alert.getResult();
+            alert.setTitle("Simple Text Editor");
+            alert.showAndWait();
+            ButtonType result = alert.getResult();
 
-        if (result == save) {
+            if (result == save) {
 
-            save(true);
-            return true;
+                save(true);
+                return true;
 
-        } else if (result == dontSave) {
+            } else if (result == dontSave) {
 
-            txtEditor.clear();
-            isModified = false;
-            saveFile = null;
-            setWindowTitle();
-            return true;
+                txtEditor.clear();
+                isModified = false;
+                saveFile = null;
+                setWindowTitle();
+                return true;
 
-        } else if (result == ButtonType.CANCEL) {
-
+            }
             return false;
+        } else {
+            return true;
         }
+
     }
 
     @FXML
@@ -343,7 +343,38 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemOpen_onAction(ActionEvent actionEvent) {
+        if (askToSave()) {
 
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open File");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File", "*.txt"));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All File", "*"));
+            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Text File", "*.txt"));
+            fileChooser.setInitialDirectory(saveFile != null ? saveFile.getParentFile() : null);
+
+            saveFile = fileChooser.showOpenDialog(txtEditor.getScene().getWindow());
+
+            if (saveFile == null) {
+                return;
+            }
+
+            try (BufferedReader br = new BufferedReader(new FileReader(saveFile))) {
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+
+                txtEditor.clear();
+                txtEditor.setText(sb.toString());
+                isModified = false;
+                setWindowTitle();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
