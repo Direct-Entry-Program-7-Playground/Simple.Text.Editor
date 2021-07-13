@@ -152,7 +152,17 @@ public class EditorFormController {
             Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("font-size", txtEditor.getFont().getSize());
         });
 
-        
+        txtFind.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!oldValue.equals(newValue)){
+                findText = txtFind.getText();
+            }
+        });
+
+        txtFindInReplace.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!oldValue.equals(newValue)){
+                findText = txtFindInReplace.getText();
+            }
+        });
 
         Printer.defaultPrinterProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println(newValue);
