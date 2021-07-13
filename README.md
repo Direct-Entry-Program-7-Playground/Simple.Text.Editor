@@ -3,12 +3,12 @@
 IJSE - Student Payment Management System is a platform indipendent Desktop Application developed with JavaFX. Login as an admin or regular user to access the system to manage Receipts, Students, Courses, etc ...
 
 ## Features
-- Run on your PC, macOS or Linux computer
-- Find and Replace feature
+- 💻 Run on your PC, macOS or Linux computer
+- 🔎 Find and Replace feature
 - RegExp enabled 
 - Resize font
 - Shortcut keys added
-- Save user preferences  
+- 🤩 Save user preferences  
 - Status Bar shows current status of the document
 
 ## Tech
