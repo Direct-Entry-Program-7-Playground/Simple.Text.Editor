@@ -27,7 +27,7 @@ This Simple Text Editor requires Java 8 Runtime Environment [JRE8](https://www.o
 
 Clone the source code of the application using the following CLI command.
 ```sh
-git clone https://github.com/Direct-Entry-Program-7-Playground/Simple-Text-Editor.git
+git clone https://github.com/Direct-Entry-Program-7-Playground/Simple.Text.Editor.git
 ```
 
 ## License
