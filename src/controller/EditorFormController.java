@@ -176,6 +176,26 @@ public class EditorFormController {
                 mnuItemPageSetup.setDisable(false);
             }
         });
+
+        cbCaseMatchInReplace.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!matchCase && newValue) {
+                matchCase = true;
+            }
+
+            if (matchCase && !newValue) {
+                matchCase = false;
+            }
+        });
+
+        cbCaseMatchInFind.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!matchCase && newValue) {
+                matchCase = true;
+            }
+
+            if (matchCase && !newValue) {
+                matchCase = false;
+            }
+        });
     }
 
     private void init() {
