@@ -512,9 +512,10 @@ public class EditorFormController {
             saveFile = null;
             setWindowTitle();
             Platform.exit();
+        } else {
+            event.consume();
         }
 
-        System.out.println("Wooow");
         Stage primaryStage = (Stage) txtEditor.getScene().getWindow();
         Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putBoolean("is-maximized", primaryStage.isMaximized());
         Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("width", root.getWidth());
