@@ -13,12 +13,19 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.StatusBar;
+import util.Index;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.prefs.Preferences;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class EditorFormController {
 
+    private final List<Index> findings = new ArrayList();
     private PrinterJob printerJob;
     private boolean printerAvailable;
     private Label stbarCharCount;
@@ -129,6 +136,8 @@ public class EditorFormController {
             stbarCharCount.setText("Chars: " + getCharCount());
             stbarWordCount.setText("Words: " + getWordCount());
 
+            findText(findText, matchCase);
+
             setWindowTitle();
         });
 
@@ -155,12 +164,14 @@ public class EditorFormController {
         txtFind.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue.equals(newValue)) {
                 findText = txtFind.getText();
+                findText(findText, matchCase);
             }
         });
 
         txtFindInReplace.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!oldValue.equals(newValue)) {
                 findText = txtFindInReplace.getText();
+                findText(findText, matchCase);
             }
         });
 
@@ -185,6 +196,8 @@ public class EditorFormController {
             if (matchCase && !newValue) {
                 matchCase = false;
             }
+
+            findTextInVisiblePane();
         });
 
         cbCaseMatchInFind.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -195,6 +208,7 @@ public class EditorFormController {
             if (matchCase && !newValue) {
                 matchCase = false;
             }
+            findTextInVisiblePane();
         });
 
         pneFind.visibleProperty().addListener((observable, oldValue, newValue) -> {
@@ -384,6 +398,75 @@ public class EditorFormController {
             return true;
         }
 
+    }
+
+    private void findTextInVisiblePane() {
+        if (pneFind.isVisible()) {
+            findText(txtFind.getText(), matchCase);
+        }
+
+        if (pneReplace.isVisible()) {
+            findText(txtFindInReplace.getText(), matchCase);
+        }
+    }
+
+    // Find previous matching text
+    public Index findPrevious(String findText, boolean matchCase) {
+        findText(findText, matchCase);
+
+        int findCount = findings.size();
+
+        if (findCount > 0) {
+            for (int i = (findCount - 1); i >= 0; i--) {
+                int endID = findings.get(i).getEndIndex();
+
+                if (getCaretPosition() > endID) {
+                    return findings.get(i);
+                }
+            }
+            return findings.get(findCount - 1);
+        }else {
+            return null;
+        }
+    }
+
+    // Find next matching text
+    public Index findNext(String findText, boolean matchCase) {
+        findText(findText, matchCase);
+        int findCount = findings.size();
+
+        if(findCount>0){
+            for (int i = 0; i < findCount; i++) {
+                int startID = findings.get(i).getStartIndex();
+
+                if (getCaretPosition() <= startID) {
+                    return findings.get(i);
+                }
+            }
+            return findings.get(0);
+        }else {
+            return null;
+        }
+    }
+
+    public void findText(String findText, boolean matchCase) {
+        String regExp = matchCase ? findText : findText.toLowerCase(Locale.ROOT);
+
+        findings.clear();
+        txtEditor.deselect();
+
+        if (!regExp.equals("")) {
+            String text = matchCase ? txtEditor.getText() : txtEditor.getText().toLowerCase(Locale.ROOT);
+
+            Pattern pattern = Pattern.compile(regExp);
+            Matcher matcher = pattern.matcher(text);
+
+            while (matcher.find()) {
+                findings.add(new Index(matcher.start(), matcher.end()));
+            }
+            int findingCount = findings.size();
+            stsbrBottom.setText(findingCount != 0 ? "Matches: " + findingCount : "No match!");
+        }
     }
 
     @FXML
@@ -618,16 +701,44 @@ public class EditorFormController {
 
     @FXML
     private void btnFindNext_onAction(ActionEvent actionEvent) {
+        Toggle selectedToggle = FindDirGrp.getSelectedToggle();
+
+        try {
+            Index range = null;
+            if (selectedToggle.equals(rdbDown)) {
+                range = findNext(txtFind.getText(), matchCase);
+            } else if (selectedToggle.equals(rdbUp)) {
+                range = findPrevious(txtFind.getText(), matchCase);
+            }
+
+            if(range!=null){
+                txtEditor.selectRange(range.getStartIndex(), range.getEndIndex());
+            }
+
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void btnFindClose_onAction(ActionEvent actionEvent) {
         pneFind.setManaged(false);
         pneFind.setVisible(false);
+        stsbrBottom.setText("Ok");
+
     }
 
     @FXML
     private void btnFindNextInReplace_onAction(ActionEvent actionEvent) {
+        try {
+            Index range = findNext(txtFindInReplace.getText(), matchCase);
+            if(range!=null){
+                txtEditor.selectRange(range.getStartIndex(), range.getEndIndex());
+            }
+
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -642,6 +753,8 @@ public class EditorFormController {
     private void btnReplaceClose_onAction(ActionEvent actionEvent) {
         pneReplace.setManaged(false);
         pneReplace.setVisible(false);
+        stsbrBottom.setText("Ok");
+
     }
 
     @FXML
