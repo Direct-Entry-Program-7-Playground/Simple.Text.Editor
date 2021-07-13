@@ -153,13 +153,13 @@ public class EditorFormController {
         });
 
         txtFind.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!oldValue.equals(newValue)){
+            if (!oldValue.equals(newValue)) {
                 findText = txtFind.getText();
             }
         });
 
         txtFindInReplace.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(!oldValue.equals(newValue)){
+            if (!oldValue.equals(newValue)) {
                 findText = txtFindInReplace.getText();
             }
         });
@@ -593,6 +593,8 @@ public class EditorFormController {
 
     @FXML
     private void btnFindClose_onAction(ActionEvent actionEvent) {
+        pneFind.setManaged(false);
+        pneFind.setVisible(false);
     }
 
     @FXML
@@ -609,6 +611,8 @@ public class EditorFormController {
 
     @FXML
     private void btnReplaceClose_onAction(ActionEvent actionEvent) {
+        pneReplace.setManaged(false);
+        pneReplace.setVisible(false);
     }
 
     @FXML
