@@ -2,6 +2,7 @@ package controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
@@ -119,6 +120,8 @@ public class EditorFormController {
     @FXML
     private StatusBar stsbrBottom;
     private String findText = "";
+    @FXML
+    private AnchorPane root;
 
     public void initialize() {
 
@@ -473,7 +476,7 @@ public class EditorFormController {
         findText(findText, matchCase);
         try {
             Index next = findNext(findText, matchCase);
-            if(next!=null){
+            if (next != null) {
                 txtEditor.replaceText(next.getStartIndex(), next.getEndIndex(), replaceText);
                 findText(findText, matchCase);
             }
@@ -499,6 +502,25 @@ public class EditorFormController {
             e.printStackTrace();
             stsbrBottom.setText("No match!");
         }
+    }
+
+    @FXML
+    public void exit(Event event) {
+        if (askToSave()) {
+            txtEditor.clear();
+            isModified = false;
+            saveFile = null;
+            setWindowTitle();
+            Platform.exit();
+        }
+
+        System.out.println("Wooow");
+        Stage primaryStage = (Stage) txtEditor.getScene().getWindow();
+        Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putBoolean("is-maximized", primaryStage.isMaximized());
+        Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("width", root.getWidth());
+        Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("height", root.getHeight());
+        Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("xPos", primaryStage.getX());
+        Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("yPos", primaryStage.getY());
     }
 
     @FXML
@@ -588,15 +610,10 @@ public class EditorFormController {
         }
     }
 
+
     @FXML
     private void mnuItemExit_onAction(ActionEvent actionEvent) {
-        if (askToSave()) {
-            txtEditor.clear();
-            isModified = false;
-            saveFile = null;
-            setWindowTitle();
-            Platform.exit();
-        }
+        exit(actionEvent);
     }
 
     @FXML
@@ -675,7 +692,7 @@ public class EditorFormController {
         if (mnuItemZoomOut.isDisable()) {
             mnuItemZoomOut.setDisable(false);
         }
-        
+
         double editorFont = txtEditor.getFont().getSize();
         if (editorFont <= 36.0) {
             // Increase editor font size by 1px

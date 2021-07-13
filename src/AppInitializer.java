@@ -1,4 +1,6 @@
+import controller.EditorFormController;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -24,7 +26,9 @@ public class AppInitializer extends Application {
         double xPos = Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getDouble("xPos", -1);
         double yPos = Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").getDouble("yPos", -1);
 
-        AnchorPane root = FXMLLoader.load(getClass().getResource("./view/EditorForm.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./view/EditorForm.fxml"));
+        AnchorPane root = fxmlLoader.load();
+        EditorFormController editorFormController = fxmlLoader.getController();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simple Text Editor");
@@ -51,11 +55,7 @@ public class AppInitializer extends Application {
         // Set user preferences on close of primaryStage
         primaryStage.setOnCloseRequest(event -> {
 
-            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putBoolean("is-maximized", primaryStage.isMaximized());
-            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("width", root.getWidth());
-            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("height", root.getHeight());
-            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("xPos", primaryStage.getX());
-            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("yPos", primaryStage.getY());
+            editorFormController.exit(event);
         });
     }
 }
