@@ -196,6 +196,15 @@ public class EditorFormController {
                 matchCase = false;
             }
         });
+
+        pneFind.visibleProperty().addListener((observable, oldValue, newValue) -> {
+            txtFind.requestFocus();
+
+        });
+
+        pneReplace.visibleProperty().addListener((observable, oldValue, newValue) -> {
+            txtFindInReplace.requestFocus();
+        });
     }
 
     private void init() {
