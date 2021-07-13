@@ -19,15 +19,16 @@ import java.util.prefs.Preferences;
 
 public class EditorFormController {
 
-    PrinterJob printerJob;
-    boolean printerAvailable;
-    Label stbarCharCount;
-    Label stbarCarrotPosition;
-    Label stbarWordCount;
-    Label stbarfontSize;
-    File saveFile = null;
-    File saveFileDir = null;
-    boolean isModified = false;
+    private PrinterJob printerJob;
+    private boolean printerAvailable;
+    private Label stbarCharCount;
+    private Label stbarCarrotPosition;
+    private Label stbarWordCount;
+    private Label stbarfontSize;
+    private File saveFile = null;
+    private File saveFileDir = null;
+    private boolean isModified = false;
+    private boolean matchCase = false;
     @FXML
     private VBox baseVBox;
     @FXML
@@ -110,6 +111,7 @@ public class EditorFormController {
     private TextArea txtEditor;
     @FXML
     private StatusBar stsbrBottom;
+    private String findText = "";
 
     public void initialize() {
 
@@ -149,6 +151,8 @@ public class EditorFormController {
             // Set user preference on editor fontProperty change
             Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").putDouble("font-size", txtEditor.getFont().getSize());
         });
+
+        
 
         Printer.defaultPrinterProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println(newValue);
@@ -468,10 +472,37 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemFind_onAction(ActionEvent actionEvent) {
+        if (pneReplace.isVisible()) {
+            pneReplace.setManaged(false);
+            pneReplace.setVisible(false);
+        }
+
+        pneFind.setManaged(true);
+        pneFind.setVisible(true);
+
+        txtFind.setText(findText);
+        txtFind.requestFocus();
+        txtFind.selectAll();
+
+        cbCaseMatchInFind.setSelected(matchCase);
     }
 
     @FXML
     private void mnuItemReplace_onAction(ActionEvent actionEvent) {
+
+        if (pneFind.isVisible()) {
+            pneFind.setManaged(false);
+            pneFind.setVisible(false);
+        }
+
+        pneReplace.setManaged(true);
+        pneReplace.setVisible(true);
+
+        txtFindInReplace.setText(findText);
+        txtFindInReplace.requestFocus();
+        txtFindInReplace.selectAll();
+
+        cbCaseMatchInReplace.setSelected(matchCase);
     }
 
     @FXML
