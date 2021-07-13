@@ -1,15 +1,18 @@
-# A Simple Text Editor
+# Simple Text Editor
 
-IJSE - Student Payment Management System is a platform indipendent Desktop Application developed with JavaFX. Login as an admin or regular user to access the system to manage Receipts, Students, Courses, etc ...
+Simple Text Editor is a Java Application, that allows you to create, open and edit text files on your computer.
 
 ## Features
-- 💻 Run on your PC, macOS or Linux computer
-- 🔎 Find and Replace feature
-- RegExp enabled 
-- Resize font
+- **Undo** - Undo the last action or text edit
+- **Redo** - Redo the last action or text edit
+- **Print** - Print the current text document
+- **🔎 Find and Replace** - Finds the specified text on the page, optionally replacing one or more occurrences with a new text value, RegExp enabled.
+- **Font size** - Change font size ranging from 10px font size to 36px font size.
 - Shortcut keys added
-- 🤩 Save user preferences  
-- Status Bar shows current status of the document
+- **Word Wrap** - Toggle the current word wrap mode.
+- **🤩 User Preferences** - Save user preferences  
+- **Status Bar** - Display current status of the document
+- 💻 Run on your PC, macOS or Linux computer
 
 ## Tech
 - [Java 8] - Developed with Java 8
