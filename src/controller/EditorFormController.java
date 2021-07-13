@@ -425,7 +425,7 @@ public class EditorFormController {
                 }
             }
             return findings.get(findCount - 1);
-        }else {
+        } else {
             return null;
         }
     }
@@ -435,7 +435,7 @@ public class EditorFormController {
         findText(findText, matchCase);
         int findCount = findings.size();
 
-        if(findCount>0){
+        if (findCount > 0) {
             for (int i = 0; i < findCount; i++) {
                 int startID = findings.get(i).getStartIndex();
 
@@ -444,7 +444,7 @@ public class EditorFormController {
                 }
             }
             return findings.get(0);
-        }else {
+        } else {
             return null;
         }
     }
@@ -466,6 +466,38 @@ public class EditorFormController {
             }
             int findingCount = findings.size();
             stsbrBottom.setText(findingCount != 0 ? "Matches: " + findingCount : "No match!");
+        }
+    }
+
+    public void replaceText(String findText, boolean matchCase, String replaceText) {
+        findText(findText, matchCase);
+        try {
+            Index next = findNext(findText, matchCase);
+            if(next!=null){
+                txtEditor.replaceText(next.getStartIndex(), next.getEndIndex(), replaceText);
+                findText(findText, matchCase);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void replaceAllText(String findText, boolean matchCase, String replaceText) {
+
+        try {
+            if (!matchCase) {
+                String newText = txtEditor.getText().replaceAll("(?i)" + findText, replaceText);
+                txtEditor.setText(newText);
+            } else {
+                String newText = txtEditor.getText().replaceAll(findText, replaceText);
+                txtEditor.setText(newText);
+            }
+
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            stsbrBottom.setText("No match!");
         }
     }
 
@@ -711,7 +743,7 @@ public class EditorFormController {
                 range = findPrevious(txtFind.getText(), matchCase);
             }
 
-            if(range!=null){
+            if (range != null) {
                 txtEditor.selectRange(range.getStartIndex(), range.getEndIndex());
             }
 
@@ -732,7 +764,7 @@ public class EditorFormController {
     private void btnFindNextInReplace_onAction(ActionEvent actionEvent) {
         try {
             Index range = findNext(txtFindInReplace.getText(), matchCase);
-            if(range!=null){
+            if (range != null) {
                 txtEditor.selectRange(range.getStartIndex(), range.getEndIndex());
             }
 
@@ -743,10 +775,16 @@ public class EditorFormController {
 
     @FXML
     private void btnReplace_onAction(ActionEvent actionEvent) {
+        if (!txtFindInReplace.getText().equals("")) {
+            replaceText(txtFindInReplace.getText(), matchCase, txtReplace.getText());
+        }
     }
 
     @FXML
     private void btnReplaceAll_onAction(ActionEvent actionEvent) {
+        if (!txtFindInReplace.getText().equals("")) {
+            replaceAllText(txtFindInReplace.getText(), matchCase, txtReplace.getText());
+        }
     }
 
     @FXML
