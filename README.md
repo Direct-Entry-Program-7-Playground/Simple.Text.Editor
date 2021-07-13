@@ -1,6 +1,6 @@
 # Simple Text Editor
 
-Simple Text Editor is a Java Application, that allows you to create, open and edit text files on your computer.
+Simple Text Editor is a Java Application, that allows you to create, open, edit and save text files on your computer. 
 
 ## Features
 - **Undo** - Undo the last action or text edit
@@ -32,7 +32,8 @@ git clone https://github.com/Direct-Entry-Program-7-Playground/Simple-Text-Edito
 
 ## License
 Apache License Version 2.0, January 2004
-Copyright 2021 Manoj R. Randeni
+
+**Copyright 2021 Manoj R. Randeni**
 
 - [Linkedin]
 - [Github]
