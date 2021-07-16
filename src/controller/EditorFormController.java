@@ -3,11 +3,16 @@ package controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -179,7 +184,6 @@ public class EditorFormController {
         });
 
         Printer.defaultPrinterProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(newValue);
             // Listen to printers change
             if (newValue == null) {
                 printerAvailable = false;
@@ -222,6 +226,8 @@ public class EditorFormController {
         pneReplace.visibleProperty().addListener((observable, oldValue, newValue) -> {
             txtFindInReplace.requestFocus();
         });
+
+
     }
 
     private void init() {
@@ -359,7 +365,7 @@ public class EditorFormController {
             saveFileDir = saveFile.getParentFile();
             Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").put("last-directory", saveFileDir.toString());
         }
-        System.out.println(saveFile != null ? saveFile.getParentFile() : null);
+//        System.out.println(saveFile != null ? saveFile.getParentFile() : null);
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(saveFile))) {
             bw.write(txtEditor.getText());
@@ -504,6 +510,49 @@ public class EditorFormController {
         }
     }
 
+    private void open(File file, Event event) {
+        if (askToSave()) {
+            if (file == null) {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Open File");
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File", "*.txt"));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All File", "*"));
+                fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Text File", "*.txt"));
+                fileChooser.setInitialDirectory(saveFileDir != null ? new File(String.valueOf(saveFileDir)) : null);
+
+
+                saveFile = fileChooser.showOpenDialog(txtEditor.getScene().getWindow());
+
+                if (saveFile == null) {
+                    return;
+                }
+            } else {
+                saveFile = file;
+            }
+
+
+            saveFileDir = file != null ? file.getParentFile() : saveFile.getParentFile();
+            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").put("last-directory", saveFileDir.toString());
+
+            try (BufferedReader br = new BufferedReader(new FileReader(saveFile))) {
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+
+                txtEditor.clear();
+                txtEditor.setText(sb.toString());
+                isModified = false;
+                setWindowTitle();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @FXML
     public void exit(Event event) {
         if (askToSave()) {
@@ -536,41 +585,8 @@ public class EditorFormController {
 
     @FXML
     private void mnuItemOpen_onAction(ActionEvent actionEvent) {
-        if (askToSave()) {
 
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open File");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File", "*.txt"));
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All File", "*"));
-            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Text File", "*.txt"));
-            fileChooser.setInitialDirectory(saveFileDir != null ? new File(String.valueOf(saveFileDir)) : null);
-
-
-            saveFile = fileChooser.showOpenDialog(txtEditor.getScene().getWindow());
-
-            if (saveFile == null) {
-                return;
-            }
-            saveFileDir = saveFile.getParentFile();
-            Preferences.userRoot().node("lk").node("ijse").node("simple-text-editor").put("last-directory", saveFileDir.toString());
-
-            try (BufferedReader br = new BufferedReader(new FileReader(saveFile))) {
-
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line).append("\n");
-                }
-
-                txtEditor.clear();
-                txtEditor.setText(sb.toString());
-                isModified = false;
-                setWindowTitle();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        open(null, actionEvent);
     }
 
     @FXML
@@ -833,5 +849,21 @@ public class EditorFormController {
 
     @FXML
     private void txtEditor_onClicked(MouseEvent mouseEvent) {
+    }
+
+    @FXML
+    private void txtEditor_onDragOver(DragEvent dragEvent) {
+        if (dragEvent.getDragboard().hasFiles()) {
+            dragEvent.acceptTransferModes(TransferMode.ANY);
+        }
+    }
+
+    @FXML
+    private void txtEditor_onDragDropped(DragEvent dragEvent) {
+        if (dragEvent.getDragboard().hasFiles()) {
+            File file = dragEvent.getDragboard().getFiles().get(0);
+            open(file, dragEvent);
+            dragEvent.setDropCompleted(true);
+        }
     }
 }
