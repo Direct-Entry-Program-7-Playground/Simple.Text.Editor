@@ -8,20 +8,21 @@ package controller;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.StatusBar;
 import util.Index;
@@ -785,7 +786,18 @@ public class EditorFormController {
     }
 
     @FXML
-    private void mnuItemAbout_onAction(ActionEvent actionEvent) {
+    private void mnuItemAbout_onAction(ActionEvent actionEvent) throws IOException {
+        Parent load = FXMLLoader.load(this.getClass().getResource("../view/AboutForm.fxml"));
+        Scene scene = new Scene(load);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("About");
+//        stage.initOwner(txtEditor.getScene().getWindow());
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.show();
+        stage.centerOnScreen();
+
     }
 
     @FXML
