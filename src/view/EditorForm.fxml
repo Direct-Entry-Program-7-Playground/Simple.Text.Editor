@@ -241,7 +241,7 @@
                   <Insets left="20.0" right="10.0" />
                </padding>
             </AnchorPane>
-            <TextArea fx:id="txtEditor" onMouseClicked="#txtEditor_onClicked" VBox.vgrow="ALWAYS" />
+            <TextArea fx:id="txtEditor" onDragDropped="#txtEditor_onDragDropped" onDragOver="#txtEditor_onDragOver" onMouseClicked="#txtEditor_onClicked" VBox.vgrow="ALWAYS" />
             <StatusBar fx:id="stsbrBottom">
                <padding>
                   <Insets left="20.0" right="20.0" />
