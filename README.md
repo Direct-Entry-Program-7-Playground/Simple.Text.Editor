@@ -7,7 +7,7 @@ Simple Text Editor is a Java Application, that allows you to create, open, edit 
 - **Redo** - Redo the last action or text edit
 - **Print** - Print the current text document
 - **🔎 Find and Replace** - Finds the specified text on the page, optionally replacing one or more occurrences with a new text value, RegExp enabled.
-- **Font size** - Change font size ranging from 10px font size to 36px font size.
+- **Font size** - Change font size, ranging from 10px font size to 36px font size.
 - Shortcut keys added
 - **Word Wrap** - Toggle the current word wrap mode.
 - **🤩 User Preferences** - Save user preferences  
@@ -17,7 +17,7 @@ Simple Text Editor is a Java Application, that allows you to create, open, edit 
 ## Tech
 - [Java 8] - Developed with Java 8
 - [JavaFX] - Desktop Application development platform
-- [Scene Builder] - Real-time FXML Editior
+- [Scene Builder] - Real-time FXML Editor
 - [JFoenix] - JavaFX Material Design Library
 - [FontAwesomeFX] - Font Awesome icon library for JavaFX
 
